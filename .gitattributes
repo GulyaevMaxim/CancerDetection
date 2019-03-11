@@ -1,3 +1,7 @@
 research/data/my_valid.csv filter=lfs diff=lfs merge=lfs -text
 research/data/my_train.csv filter=lfs diff=lfs merge=lfs -text
 research/train/runs/Mar11_12-26-56_maxim-To-be-filled-by-O-E-M filter=lfs diff=lfs merge=lfs -text
+research/data/models/0_9028_ResNet18.pt filter=lfs diff=lfs merge=lfs -text
+research/data/models/0_8897_ResNet18.pt filter=lfs diff=lfs merge=lfs -text
+research/train/runs/Mar11_23-36-54_maxim-To-be-filled-by-O-E-M filter=lfs diff=lfs merge=lfs -text
+research/train/runs/ResNet18 filter=lfs diff=lfs merge=lfs -text

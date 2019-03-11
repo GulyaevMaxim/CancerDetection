@@ -2,7 +2,6 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
-from torch.autograd import Variable
 import numpy as np
 import copy
 import argparse
@@ -80,7 +79,8 @@ def main():
     data_transforms_valid = T.Compose([
         T.Resize((args.weight, args.height)),
         T.ToTensor(),
-        T.Normalize(mean, std)])
+        T.Normalize(mean, std)]
+    )
 
     model = torchvision.models.resnet18(pretrained='imagenet')
     #for child in model.children():
@@ -90,7 +90,7 @@ def main():
     num_ftrs = model.fc.in_features
     model.fc = nn.Linear(num_ftrs, n_class)
 
-    #model.load_state_dict(torch.load(pth_model))
+    model.load_state_dict(torch.load('/home/maxim/Work/CancerDetection/data/best/0_9028_ResNet18.pt'))
 
     model.cuda()
     optimizer = optim.Adam(model.parameters(), lr=0.00005)

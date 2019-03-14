@@ -27,8 +27,6 @@ is_available_cuda = True
 mean = [0.485, 0.456, 0.406]
 std = [0.229, 0.224, 0.225]
 
-pth_model = '/home/maxim/Work/CancerDetection/data/r18.pt'
-
 
 def main():
 
@@ -36,7 +34,7 @@ def main():
     parser.add_argument('--batch_size', '-b',
                         help='Batch_size',
                         type=int,
-                        default=80)
+                        default=10)
     parser.add_argument('--dest', '-d',
                         help='Path to save model')
     parser.add_argument('--src', '-s',
@@ -72,7 +70,9 @@ def main():
         T.Resize((args.weight, args.height)),
         T.ColorJitter(brightness=0.5,
                       contrast=0.5),
-        T.RandomRotation((0, 5)),
+        T.RandomRotation((-90, 90)),
+        T.RandomHorizontalFlip(p=0.5),
+        T.RandomVerticalFlip(p=0.5),
         T.ToTensor(),
         T.Normalize(mean, std)])
 
@@ -82,18 +82,17 @@ def main():
         T.Normalize(mean, std)]
     )
 
-    model = torchvision.models.resnet18(pretrained='imagenet')
+    model = torchvision.models.densenet169(pretrained='imagenet')
     #for child in model.children():
     #    for param in child.parameters():
     #        param.requires_grad = False
-
-    num_ftrs = model.fc.in_features
+    num_ftrs = model.classifier.in_features
     model.fc = nn.Linear(num_ftrs, n_class)
 
-    model.load_state_dict(torch.load('/home/maxim/Work/CancerDetection/data/best/0_9028_ResNet18.pt'))
+    #model.load_state_dict(torch.load('/home/maxim/Work/CancerDetection/data/best/0_8895_ResNet18_B.pt'))
 
     model.cuda()
-    optimizer = optim.Adam(model.parameters(), lr=0.00005)
+    optimizer = optim.Adam(model.parameters(), lr=0.000005)
 
     writer = SummaryWriter()
     train_ds = CancerDataset('/home/maxim/Work/CancerDetection/data/my_train.csv',
@@ -121,6 +120,7 @@ def main():
             best_accuracy = accuracy
             best_model = copy.deepcopy(model)
             best_model.cpu()
+            pth_model = '/home/maxim/Work/CancerDetection/data/dense169_{0}.pt'.format(epoch)
             torch.save(best_model.state_dict(), pth_model)
 
 

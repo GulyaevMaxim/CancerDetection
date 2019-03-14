@@ -20,6 +20,9 @@ is_available_cuda = True
 mean = [0.485, 0.456, 0.406]
 std = [0.229, 0.224, 0.225]
 
+#from pytorchcv.model_provider import get_model as ptcv_get_model
+#net = ptcv_get_model("mobilenet_w1", pretrained=True)
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -63,12 +66,12 @@ def main():
                              num_workers=1)
 
     submission_names = test_ds.get_train_img_names()
-    model = torchvision.models.resnet18(pretrained='imagenet')
+    model = torchvision.models.densenet169(pretrained='imagenet')
     # for child in model.children():
     #    for param in child.parameters():
     #        param.requires_grad = False
 
-    num_ftrs = model.fc.in_features
+    num_ftrs = model.classifier.in_features
     model.fc = nn.Linear(num_ftrs, 2)
     model.load_state_dict(torch.load(args.model))
     model.eval()
@@ -95,7 +98,7 @@ def main():
             del y_predicted
 
     df = pandas.DataFrame({'id': submission_names, 'label': predicted_labels})
-    df.to_csv('{}.csv.gz'.format(path_to_out), index=False,
+    df.to_csv('{}.gz'.format(path_to_out), index=False,
               compression='gzip')
 
 

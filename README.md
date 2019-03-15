@@ -30,15 +30,22 @@ Models are presented [here](https://drive.google.com/drive/folders/1aVX46pmBQUXB
 | 11 | B | ResNet18   | Epoch 9 | 0.9080 |
 | 12 | B | ResNet18   | Epoch 12 | 0.8985 |
 | 13 | B | ResNet18   | Epoch 22 | 0.8878 |
+| 14 | B | DenseNet169   | Epoch 3 | 0.8999 |
+| 15 | B | DenseNet169   | Epoch 5 | 0.9084 |
+| 16 | B | DenseNet169   | Epoch 9 | 0.9042 |
 
 
 ## Ensembling
 
 | Number of expetiment| Threshold | Number network from prev. table | Accuracy
 | ---- | ---- | ---- |---- |
-| 1 | Without thr | 1, 3, 6 - 12 | 0.9515 |
-| 1 | > 0.8 = 1 | 1, 3, 6 - 12 | 0.9510 |
-| 1 | > 0.5 = 1 | 1, 3, 6 - 12 | 0.9484 |
+| 1 | Without threshold | 1, 3, 6 - 12 | 0.9515 |
+| 2 | > 0.8 = 1 | 1, 3, 6 - 12 | 0.9510 |
+| 3 | > 0.5 = 1 | 1, 3, 6 - 12 | 0.9484 |
+| 4 | Without threshold | 1, 9 - 11 | 0.9345 |
+| 5 | Without threshold | 1, 3, 6 - 12, 14-16 | 0.9539 |
+| 6 | Without threshold | 1, 3, 7 - 11, 14-16 | 0.9521 |
+
 
 ## Types of augmentation
 

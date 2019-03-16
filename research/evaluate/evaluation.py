@@ -20,8 +20,8 @@ is_available_cuda = True
 mean = [0.485, 0.456, 0.406]
 std = [0.229, 0.224, 0.225]
 
-#from pytorchcv.model_provider import get_model as ptcv_get_model
-#net = ptcv_get_model("mobilenet_w1", pretrained=True)
+from pytorchcv.model_provider import get_model as ptcv_get_model
+net = ptcv_get_model("menet456_24x1_g3", pretrained=True)
 
 
 def main():
@@ -66,13 +66,13 @@ def main():
                              num_workers=1)
 
     submission_names = test_ds.get_train_img_names()
-    model = torchvision.models.densenet169(pretrained='imagenet')
+    model = net #torchvision.models.densenet169(pretrained='imagenet')
     # for child in model.children():
     #    for param in child.parameters():
     #        param.requires_grad = False
 
-    num_ftrs = model.classifier.in_features
-    model.fc = nn.Linear(num_ftrs, 2)
+    num_ftrs = model.output.in_features
+    model.output = nn.Linear(num_ftrs, 2)
     model.load_state_dict(torch.load(args.model))
     model.eval()
 

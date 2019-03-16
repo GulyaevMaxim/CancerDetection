@@ -6,6 +6,7 @@ from __future__ import print_function
 import os
 import pandas
 import numpy as np
+import cv2
 
 from PIL import Image
 from torch.utils.data import Dataset
@@ -29,8 +30,8 @@ class CancerDataset(Dataset):
         """
         self.train_images = pandas.read_csv(csv_file)
 
-        self.train_img_names = self.train_images.values[:, 1]
-        self.predicted_labels = self.train_images.values[:, 2]
+        self.train_img_names = self.train_images.values[:, 0]
+        self.predicted_labels = self.train_images.values[:, 1]
 
         self.root_dir = os.path.abspath(root_dir)
 
@@ -42,10 +43,14 @@ class CancerDataset(Dataset):
     def __getitem__(self, id):
         img_name = os.path.join(self.root_dir, self.train_img_names[id])
         img_name += '.tif'
-        image = Image.open(img_name).convert('RGB')
+        img = cv2.imread(img_name)
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        image = self.transform_image(image=img)
+        image = image['image']
+        #image = Image.open(img_name).convert('RGB')
 
-        if self.transform_image:
-            image = self.transform_image(image)
+        #if self.transform_image:
+        #    image = self.transform_image(image)
 
         label_id = self.predicted_labels[id]
 

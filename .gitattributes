@@ -12,3 +12,11 @@ research/train/runs/MobileNetV1 filter=lfs diff=lfs merge=lfs -text
 research/train/runs/MobileNetV2 filter=lfs diff=lfs merge=lfs -text
 research/train/runs/ResNet18_19-42epochs filter=lfs diff=lfs merge=lfs -text
 research/train/runs/ResNet18B filter=lfs diff=lfs merge=lfs -text
+research/data/ filter=lfs diff=lfs merge=lfs -text
+research/train/runs/ filter=lfs diff=lfs merge=lfs -text
+research/train/runs/DenseNet169ep1 filter=lfs diff=lfs merge=lfs -text
+research/train/runs/DenseNet169From2Epoch filter=lfs diff=lfs merge=lfs -text
+research/train/runs/Mar16_11-56-53_maxim-To-be-filled-by-O-E-M filter=lfs diff=lfs merge=lfs -text
+research/train/runs/Mar16_12-34-14_maxim-To-be-filled-by-O-E-M filter=lfs diff=lfs merge=lfs -text
+research/train/runs/MeNET456_1-21 filter=lfs diff=lfs merge=lfs -text
+research/train/runs/MeNET45621+ filter=lfs diff=lfs merge=lfs -text

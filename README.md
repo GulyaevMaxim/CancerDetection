@@ -33,6 +33,12 @@ Models are presented [here](https://drive.google.com/drive/folders/1aVX46pmBQUXB
 | 14 | B | DenseNet169   | Epoch 3 | 0.8999 |
 | 15 | B | DenseNet169   | Epoch 5 | 0.9084 |
 | 16 | B | DenseNet169   | Epoch 9 | 0.9042 |
+| 17 | B | MeNet456   | Epoch 13 | 0.8975 |
+| 18 | B | MeNet456   | Epoch 18 | 0.8947 |
+| 19 | B | MeNet456   | Epoch 20 | 0.9047 |
+| 20 | B | MeNet456   | Epoch 21 | 0.9023 |
+| 21 | B | MeNet456   | Epoch 29 | 0.9103 |
+| 22 | B | MeNet456   | Epoch 31 | 0.9033 |
 
 
 ## Ensembling
@@ -45,6 +51,8 @@ Models are presented [here](https://drive.google.com/drive/folders/1aVX46pmBQUXB
 | 4 | Without threshold | 1, 9 - 11 | 0.9345 |
 | 5 | Without threshold | 1, 3, 6 - 12, 14-16 | 0.9539 |
 | 6 | Without threshold | 1, 3, 7 - 11, 14-16 | 0.9521 |
+| 5 | Without threshold | 1, 3, 6 - 12, 14-16, 19-22 | 0.9577 |
+| 6 | Without threshold | 1, 8-11, 15, 16, 19-22 | 0.9544 |
 
 
 ## Types of augmentation
@@ -69,4 +77,20 @@ T.RandomRotation((-90, 90)),
 T.RandomHorizontalFlip(p=0.5),
 T.RandomVerticalFlip(p=0.5)
 T.Normalize(mean, std) # ImageNet
+```
+
+### C
+
+```
+# pretrained ImageNet network
+albumentations.RandomRotate90(p=0.5),
+albumentations.Transpose(p=0.5),
+albumentations.Flip(p=0.5),
+albumentations.OneOf([
+albumentations.CLAHE(clip_limit=2), albumentations.IAASharpen(), albumentations.IAAEmboss(),
+albumentations.RandomBrightness(), albumentations.RandomContrast(),
+albumentations.JpegCompression(), albumentations.Blur(), albumentations.GaussNoise()], p=0.5),
+albumentations.HueSaturationValue(p=0.5),
+albumentations.ShiftScaleRotate(shift_limit=0.15, scale_limit=0.15, rotate_limit=45, p=0.5),
+albumentations.Normalize(),
 ```

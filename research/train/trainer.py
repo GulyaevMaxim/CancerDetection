@@ -12,11 +12,16 @@ from tensorboardX import SummaryWriter
 from tqdm import tqdm
 import sys
 import research.common.utils as utils
-sys.path.append('../../common')
+import research.common.fabric_models as fm
+
+import albumentations
+from albumentations import torch as AT
 from research.common.loader import CancerDataset
+sys.path.append('../../common')
+
 
 #from pytorchcv.model_provider import get_model as ptcv_get_model
-#net = ptcv_get_model("fishnet150", pretrained=True)
+#net = ptcv_get_model("menet456_24x1_g3", pretrained=True)
 
 
 n_class = 2
@@ -34,7 +39,7 @@ def main():
     parser.add_argument('--batch_size', '-b',
                         help='Batch_size',
                         type=int,
-                        default=10)
+                        default=56)
     parser.add_argument('--dest', '-d',
                         help='Path to save model')
     parser.add_argument('--src', '-s',
@@ -66,30 +71,45 @@ def main():
     args = parser.parse_args()
     best_accuracy = -1.0
 
-    data_transforms = T.Compose([
-        T.Resize((args.weight, args.height)),
+    data_transforms = albumentations.Compose([
+        albumentations.RandomRotate90(p=0.5),
+        albumentations.Transpose(p=0.5),
+        albumentations.Flip(p=0.5),
+        albumentations.OneOf([
+            albumentations.CLAHE(clip_limit=2), albumentations.IAASharpen(), albumentations.IAAEmboss(),
+            albumentations.RandomBrightness(), albumentations.RandomContrast(),
+            albumentations.JpegCompression(), albumentations.Blur(), albumentations.GaussNoise()], p=0.5),
+        albumentations.HueSaturationValue(p=0.5),
+        albumentations.ShiftScaleRotate(shift_limit=0.15, scale_limit=0.15, rotate_limit=45, p=0.5),
+        albumentations.Normalize(),
+        AT.ToTensor()
+    ])
+
+    data_transforms_valid = albumentations.Compose([
+        albumentations.Normalize(),
+        AT.ToTensor()
+    ])
+
+    '''data_transforms = T.Compose([
+        #T.Resize((args.weight, args.height)),
         T.ColorJitter(brightness=0.5,
                       contrast=0.5),
         T.RandomRotation((-90, 90)),
         T.RandomHorizontalFlip(p=0.5),
         T.RandomVerticalFlip(p=0.5),
         T.ToTensor(),
-        T.Normalize(mean, std)])
-
-    data_transforms_valid = T.Compose([
-        T.Resize((args.weight, args.height)),
-        T.ToTensor(),
         T.Normalize(mean, std)]
     )
 
-    model = torchvision.models.densenet169(pretrained='imagenet')
-    #for child in model.children():
-    #    for param in child.parameters():
-    #        param.requires_grad = False
-    num_ftrs = model.classifier.in_features
-    model.fc = nn.Linear(num_ftrs, n_class)
+    data_transforms_valid = T.Compose([
+        #T.Resize((args.weight, args.height)),
+        T.ToTensor(),
+        T.Normalize(mean, std)]
+    )'''
 
-    #model.load_state_dict(torch.load('/home/maxim/Work/CancerDetection/data/best/0_8895_ResNet18_B.pt'))
+    model = fm.get_dense_net_169(n_class, pretrained=False)
+
+    #model.load_state_dict(torch.load('/home/maxim/Work/CancerDetection/data/best/0_9023_MeNet456B.pt'))
 
     model.cuda()
     optimizer = optim.Adam(model.parameters(), lr=0.000005)
@@ -109,7 +129,7 @@ def main():
     loader_train = DataLoader(train_ds,
                               batch_size=args.batch_size, num_workers=1)
 
-    for epoch in range(1000):
+    for epoch in range(100):
 
         utils.train(model, writer, is_available_cuda, loader_train,
                     F.cross_entropy, optimizer, epoch)
@@ -120,7 +140,7 @@ def main():
             best_accuracy = accuracy
             best_model = copy.deepcopy(model)
             best_model.cpu()
-            pth_model = '/home/maxim/Work/CancerDetection/data/dense169_{0}.pt'.format(epoch)
+            pth_model = '/home/maxim/Work/CancerDetection/data/dense_{0}.pt'.format(epoch)
             torch.save(best_model.state_dict(), pth_model)
 
 

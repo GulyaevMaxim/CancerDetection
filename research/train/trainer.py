@@ -19,11 +19,6 @@ from albumentations import torch as AT
 from research.common.loader import CancerDataset
 sys.path.append('../../common')
 
-
-#from pytorchcv.model_provider import get_model as ptcv_get_model
-#net = ptcv_get_model("menet456_24x1_g3", pretrained=True)
-
-
 n_class = 2
 
 is_available_cuda = True
@@ -44,7 +39,7 @@ def main():
                         help='Path to save model')
     parser.add_argument('--src', '-s',
                         help='Path to model',
-                        default=None)
+                        default='/home/maxim/Work/CancerDetection/data/dense_122.pt')
     parser.add_argument('--weight', '-w',
                         help='weight image size for net',
                         type=int, default=224)
@@ -56,13 +51,17 @@ def main():
     parser.add_argument('--weights',
                         help='Path to weights of classes')
     parser.add_argument('--train_csv',
-                        help='Path to data CSV')
+                        help='Path to data CSV',
+                        default='/home/maxim/Work/CancerDetection/data/my_valid.csv')
     parser.add_argument('--data_train',
-                        help='Path to images for dataset')
+                        help='Path to images for dataset',
+                        default='/home/maxim/Work/CancerDetection/data/train/')
     parser.add_argument('--validate_csv',
-                        help='Path to  validate data CSV ')
+                        help='Path to  validate data CSV ',
+                        default='/home/maxim/Work/CancerDetection/data/my_valid.csv')
     parser.add_argument('--data_validate',
-                        help='Path to images for dataset validate')
+                        help='Path to images for dataset validate',
+                        default='/home/maxim/Work/CancerDetection/data/train/')
     parser.add_argument('--cuda', dest='is_available_cuda',
                         action='store_true')
     parser.add_argument('--no-cuda', dest='is_available_cuda',
@@ -109,18 +108,18 @@ def main():
 
     model = fm.get_dense_net_169(n_class, pretrained=False)
 
-    #model.load_state_dict(torch.load('/home/maxim/Work/CancerDetection/data/best/0_9023_MeNet456B.pt'))
+    model.load_state_dict(torch.load(args.src))
 
     model.cuda()
-    optimizer = optim.Adam(model.parameters(), lr=0.000005)
+    optimizer = optim.Adam(model.parameters(), lr=0.00001)
 
     writer = SummaryWriter()
-    train_ds = CancerDataset('/home/maxim/Work/CancerDetection/data/my_train.csv',
-                             '/home/maxim/Work/CancerDetection/data/train/',
+    train_ds = CancerDataset(args.train_csv,
+                             args.data_train,
                              transform_image=data_transforms,
                              )
-    valid_ds = CancerDataset('/home/maxim/Work/CancerDetection/data/my_valid.csv',
-                             '/home/maxim/Work/CancerDetection/data/train/',
+    valid_ds = CancerDataset(args.validate_csv,
+                             args.data_validate,
                              transform_image=data_transforms_valid
                              )
 
@@ -132,15 +131,15 @@ def main():
     for epoch in range(100):
 
         utils.train(model, writer, is_available_cuda, loader_train,
-                    F.cross_entropy, optimizer, epoch)
+                    F.cross_entropy, optimizer, epoch + 122)
         accuracy = utils.validate(model, writer, is_available_cuda,
-                                  loader_validate, F.cross_entropy, epoch)
+                                  loader_validate, F.cross_entropy, epoch + 122)
 
         if accuracy > best_accuracy:
             best_accuracy = accuracy
             best_model = copy.deepcopy(model)
             best_model.cpu()
-            pth_model = '/home/maxim/Work/CancerDetection/data/dense_{0}.pt'.format(epoch)
+            pth_model = '/home/maxim/Work/CancerDetection/data/dense_{0}.pt'.format(epoch + 122)
             torch.save(best_model.state_dict(), pth_model)
 
 

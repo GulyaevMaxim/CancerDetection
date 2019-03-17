@@ -51,8 +51,8 @@ Models are presented [here](https://drive.google.com/drive/folders/1aVX46pmBQUXB
 | 4 | Without threshold | 1, 9 - 11 | 0.9345 |
 | 5 | Without threshold | 1, 3, 6 - 12, 14-16 | 0.9539 |
 | 6 | Without threshold | 1, 3, 7 - 11, 14-16 | 0.9521 |
-| 5 | Without threshold | 1, 3, 6 - 12, 14-16, 19-22 | 0.9577 |
-| 6 | Without threshold | 1, 8-11, 15, 16, 19-22 | 0.9544 |
+| 7 | Without threshold | 1, 3, 6 - 12, 14-16, 19-22 | 0.9577 |
+| 8 | Without threshold | 1, 8-11, 15, 16, 19-22 | 0.9544 |
 
 
 ## Types of augmentation

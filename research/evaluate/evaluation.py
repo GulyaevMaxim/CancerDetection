@@ -10,8 +10,14 @@ from research.common.loader import CancerDataset
 import numpy
 import torchvision
 import torch.nn as nn
+import research.common.fabric_models as fm
 from torch.utils.data import DataLoader
 from torch.autograd import Variable
+
+
+import albumentations
+from albumentations import torch as AT
+
 sys.path.append('../../common')
 
 is_available_cuda = True
@@ -20,8 +26,8 @@ is_available_cuda = True
 mean = [0.485, 0.456, 0.406]
 std = [0.229, 0.224, 0.225]
 
-from pytorchcv.model_provider import get_model as ptcv_get_model
-net = ptcv_get_model("menet456_24x1_g3", pretrained=True)
+#from pytorchcv.model_provider import get_model as ptcv_get_model
+#net = ptcv_get_model("menet456_24x1_g3", pretrained=True)
 
 
 def main():
@@ -29,7 +35,7 @@ def main():
     parser.add_argument('--batch_size', '-b',
                         help='Batch_size',
                         type=int,
-                        default=80)
+                        default=160)
     parser.add_argument('--weight', '-w',
                         help='weight image size for net',
                         type=int, default=224)
@@ -56,23 +62,20 @@ def main():
 
     test_ds = CancerDataset(csv_file=args.data_csv,
                             root_dir=args.data,
-                            transform_image=T.Compose([
-                                T.Resize(image_size),
-                                T.ToTensor(),
-                                T.Normalize(mean, std)
+                            transform_image=albumentations.Compose([
+                                albumentations.Normalize(),
+                                AT.ToTensor()
                             ]))
 
     loader_test = DataLoader(test_ds, batch_size=args.batch_size,
                              num_workers=1)
 
     submission_names = test_ds.get_train_img_names()
-    model = net #torchvision.models.densenet169(pretrained='imagenet')
+    model = fm.get_dense_net_169(2, pretrained=False)
     # for child in model.children():
     #    for param in child.parameters():
     #        param.requires_grad = False
 
-    num_ftrs = model.output.in_features
-    model.output = nn.Linear(num_ftrs, 2)
     model.load_state_dict(torch.load(args.model))
     model.eval()
 

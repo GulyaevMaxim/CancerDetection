@@ -58,11 +58,10 @@ def main():
     args = parser.parse_args()
     path_to_out = args.path_to_out_zip
 
-    image_size = (args.weight, args.height)
-
     test_ds = CancerDataset(csv_file=args.data_csv,
                             root_dir=args.data,
                             transform_image=albumentations.Compose([
+                                albumentations.Resize(args.height, args.weights),
                                 albumentations.Normalize(),
                                 AT.ToTensor()
                             ]))
@@ -100,9 +99,7 @@ def main():
             del data
             del y_predicted
 
-    df = pandas.DataFrame({'id': submission_names, 'label': predicted_labels})
-    df.to_csv('{}.gz'.format(path_to_out), index=False,
-              compression='gzip')
+    utils.generate_submission(submission_names, predicted_labels, path_to_out)
 
 
 if __name__ == '__main__':

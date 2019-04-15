@@ -12,14 +12,28 @@ def get_dense_net_169(number_outputs, pretrained=False):
     net.classifier = nn.Linear(num_ftrs, number_outputs)
     return net
 
+
 def get_dense_net_121(number_outputs, pretrained=False):
     net = torchvision.models.densenet121()
     if pretrained:
         net = torchvision.models.densenet121(
             pretrained='imagenet')
+        #for child in net.children():
+        #    for param in child.parameters():
+        #        param.requires_grad = False
     num_ftrs = net.classifier.in_features
-    net.classifier = nn.Linear(num_ftrs, number_outputs)
+    out_ftrs = int(net.classifier.out_features / 4)
+    net.classifier = nn.Sequential(
+        nn.Sigmoid(),
+        nn.Dropout(0.5),
+        nn.Linear(num_ftrs, out_ftrs, bias=True),
+        nn.SELU(),
+        nn.Dropout(0.7),
+        nn.Linear(in_features=out_ftrs, out_features=1, bias=True)
+    )
+
     return net
+
 
 def get_menet_456(number_outputs, pretrained=False):
     net = ptcv_get_model("menet456_24x1_g3", pretrained=False)

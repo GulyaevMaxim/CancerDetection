@@ -1,6 +1,7 @@
 import pandas
 import argparse
 import os
+import research.common.utils as utils
 
 
 def main():
@@ -19,11 +20,8 @@ def main():
         labels += buf_csv.to_numpy()[:, 1]
 
     labels /= len(list_dir)
-    #labels[labels > 0.75] = 1
 
-    df = pandas.DataFrame({'id': submission_names, 'label': labels})
-    df.to_csv('{}.csv.gz'.format(args.p), index=False,
-              compression='gzip')
+    utils.generate_submission(submission_names, labels, args.p)
 
 
 if __name__ == '__main__':

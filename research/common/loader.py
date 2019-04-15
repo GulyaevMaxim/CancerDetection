@@ -14,8 +14,8 @@ from torch.utils.data import Dataset
 
 class CancerDataset(Dataset):
 
-    def __init__(self, csv_file,
-                 root_dir,
+    def __init__(self, csv_file=None,
+                 root_dir=None,
                  transform_image=None,
                  ):
         """
@@ -28,10 +28,15 @@ class CancerDataset(Dataset):
         transform_image transforms for images
         transform_mask transforms for masks
         """
-        self.train_images = pandas.read_csv(csv_file)
+        if csv_file is None:
+            self.train_img_names = os.listdir(root_dir)
 
-        self.train_img_names = self.train_images.values[:, 0]
-        self.predicted_labels = self.train_images.values[:, 1]
+            self.predicted_labels = np.zeros(len(self.train_img_names), dtype=float)
+        else:
+            self.train_images = pandas.read_csv(csv_file)
+
+            self.train_img_names = self.train_images.values[:, 0]
+            self.predicted_labels = self.train_images.values[:, 1]
 
         self.root_dir = os.path.abspath(root_dir)
 

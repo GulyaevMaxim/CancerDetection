@@ -26,9 +26,6 @@ is_available_cuda = True
 mean = [0.485, 0.456, 0.406]
 std = [0.229, 0.224, 0.225]
 
-#from pytorchcv.model_provider import get_model as ptcv_get_model
-#net = ptcv_get_model("menet456_24x1_g3", pretrained=True)
-
 
 def main():
     parser = argparse.ArgumentParser()
@@ -61,7 +58,7 @@ def main():
     test_ds = CancerDataset(csv_file=args.data_csv,
                             root_dir=args.data,
                             transform_image=albumentations.Compose([
-                                albumentations.Resize(args.height, args.weights),
+                                albumentations.Resize(224, 224),
                                 albumentations.Normalize(),
                                 AT.ToTensor()
                             ]))
@@ -70,10 +67,7 @@ def main():
                              num_workers=1)
 
     submission_names = test_ds.get_train_img_names()
-    model = fm.get_dense_net_169(2, pretrained=False)
-    # for child in model.children():
-    #    for param in child.parameters():
-    #        param.requires_grad = False
+    model = fm.get_dense_net_121(2, pretrained=False)
 
     model.load_state_dict(torch.load(args.model))
     model.eval()
@@ -94,11 +88,14 @@ def main():
             y_predicted = model(data)
             for predicted in y_predicted:
 
-                label = numpy.argmax(predicted.cpu().numpy())
-                predicted_labels.append(label)
+                #label = numpy.argmax(predicted.cpu().numpy())
+                predicted_labels.append(predicted.cpu().numpy()[0])
             del data
             del y_predicted
 
+    predicted_labels = numpy.array(predicted_labels)
+    #predicted_labels[predicted_labels > 0.9999] = 1
+    #predicted_labels[predicted_labels < 0.0001] = 0
     utils.generate_submission(submission_names, predicted_labels, path_to_out)
 
 

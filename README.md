@@ -45,7 +45,7 @@ Models are presented [here](https://drive.google.com/drive/folders/1aVX46pmBQUXB
 | 26 | C | ResNet18*   | Epoch 17 + Output 1x1 + Dropout | 0.9684 |
 | 27 | C | ResNet18*   | Epoch 18 + Output 1x1 + Dropout | 0.9685 |
 
-* We use this layers instead fully-connected layer (layer to 1000 ImageNet classes)
+* We use these layers instead fully-connected layer (layer with output 1000 ImageNet classes) for modeles marked `*`
 
 ```
     num_ftrs = net.fc.in_features

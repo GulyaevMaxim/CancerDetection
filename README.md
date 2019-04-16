@@ -39,12 +39,26 @@ Models are presented [here](https://drive.google.com/drive/folders/1aVX46pmBQUXB
 | 20 | B | MeNet456   | Epoch 21 | 0.9023 |
 | 21 | B | MeNet456   | Epoch 29 | 0.9103 |
 | 22 | B | MeNet456   | Epoch 31 | 0.9033 |
-| 23 | C | MeNet456   | Epoch 3 + Output 1x1 + Dropout | 0.9510 |
-| 24 | C | Dense121   | Epoch 20(Last Layer) + Epoch 20 + Output 1x1 + Dropout | 0.9745 |
-| 25 | C | Dense169   | Epoch 23 + Output 1x1 + Dropout | 0.9710 |
-| 25 | C | ResNet18   | Epoch 17 + Output 1x1 + Dropout | 0.9684 |
-| 26 | C | ResNet18   | Epoch 18 + Output 1x1 + Dropout | 0.9685 |
+| 23 | C | MeNet456*   | Epoch 3 + Output 1x1 + Dropout | 0.9510 |
+| 24 | C | Dense121*   | Epoch 20(Last Layer) + Epoch 20 + Output 1x1 + Dropout | 0.9745 |
+| 25 | C | Dense169*   | Epoch 23 + Output 1x1 + Dropout | 0.9710 |
+| 26 | C | ResNet18*   | Epoch 17 + Output 1x1 + Dropout | 0.9684 |
+| 27 | C | ResNet18*   | Epoch 18 + Output 1x1 + Dropout | 0.9685 |
 
+* We use this layers instead fully-connected layer (layer to 1000 ImageNet classes)
+
+```
+    num_ftrs = net.fc.in_features
+    out_ftrs = int(net.fc.out_features / 4)
+    net.fc = nn.Sequential(
+        nn.Sigmoid(),
+        nn.Dropout(0.5),
+        nn.Linear(num_ftrs, out_ftrs, bias=True),
+        nn.SELU(),
+        nn.Dropout(0.7),
+        nn.Linear(in_features=out_ftrs, out_features=1, bias=True),
+    )
+```
 
 ## Ensembling
 

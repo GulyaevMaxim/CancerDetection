@@ -40,10 +40,11 @@ Models are presented [here](https://drive.google.com/drive/folders/1aVX46pmBQUXB
 | 21 | B | MeNet456   | Epoch 29 | 0.9103 |
 | 22 | B | MeNet456   | Epoch 31 | 0.9033 |
 | 23 | C | MeNet456*   | Epoch 3 + Output 1x1 + Dropout | 0.9510 |
-| 24 | C | Dense121*   | Epoch 20(Last Layer) + Epoch 20 + Output 1x1 + Dropout | 0.9745 |
-| 25 | C | Dense169*   | Epoch 23 + Output 1x1 + Dropout | 0.9710 |
-| 26 | C | ResNet18*   | Epoch 17 + Output 1x1 + Dropout | 0.9684 |
-| 27 | C | ResNet18*   | Epoch 18 + Output 1x1 + Dropout | 0.9685 |
+| 24 | C | Dense121*   | Epoch 20(Last Layer) + Epoch 18 + Output 1x1 + Dropout | 0.9745 |
+| 25 | C | Dense121*   | Epoch 20(Last Layer) + Epoch 16 + Output 1x1 + Dropout | 0.9742 |
+| 26 | C | Dense169*   | Epoch 23 + Output 1x1 + Dropout | 0.9710 |
+| 27 | C | ResNet18*   | Epoch 17 + Output 1x1 + Dropout | 0.9684 |
+| 28 | C | ResNet18*   | Epoch 18 + Output 1x1 + Dropout | 0.9685 |
 
 * We use these layers instead fully-connected layer (layer with output 1000 ImageNet classes) for modeles marked `*`
 

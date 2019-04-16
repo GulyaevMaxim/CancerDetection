@@ -67,8 +67,7 @@ def main():
                              num_workers=1)
 
     submission_names = test_ds.get_train_img_names()
-    model = fm.get_resnet18(pretrained=False)
-    # get_dense_net_121(2, pretrained=False)
+    model = fm.get_dense_net_121(pretrained=False)
 
     model.load_state_dict(torch.load(args.model))
     model.eval()
@@ -91,14 +90,12 @@ def main():
 
             for predicted in y_predicted:
 
-                #label = numpy.argmax(predicted.cpu().numpy())
+                # label = numpy.argmax(predicted.cpu().numpy())
                 predicted_labels.append(predicted.cpu().numpy()[0])
             del data
             del y_predicted
 
     predicted_labels = numpy.array(predicted_labels)
-    #predicted_labels[predicted_labels > 0.999] = 1
-    #predicted_labels[predicted_labels < 0.0001] = 0
     utils.generate_submission(submission_names, predicted_labels, path_to_out)
 
 

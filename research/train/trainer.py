@@ -31,10 +31,11 @@ std = [0.229, 0.224, 0.225]
 def main():
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--batch_size', '-b', type=int, default=36,
+    parser.add_argument('--batch_size', '-b', type=int, default=168,
                         help='Batch_size')
     parser.add_argument('--dest', '-d',
-                        help='Path to save model')
+                        help='Path to save model',
+                        default='/home/gulyaev/Work/CancerDetection/data/resnet_18_C')
     parser.add_argument('--src', '-s',
                         help='Path to model',
                         default='/home/gulyaev/Work/CancerDetection/data/dense_121_drop30.pt')
@@ -67,8 +68,9 @@ def main():
     parser.set_defaults(is_available_cuda=True)
     args = parser.parse_args()
     best_accuracy = -1.0
+    save_path = args.dest
 
-    model = fm.get_dense_net_169(pretrained=True)
+    model = fm.get_resnet18(pretrained=True)
     # get_dense_net_121(pretrained=True)
 
     # model.load_state_dict(torch.load(args.src))
@@ -132,7 +134,7 @@ def main():
             best_accuracy = accuracy
             best_model = copy.deepcopy(model)
             best_model.cpu()
-            pth_model = '/home/gulyaev/Work/CancerDetection/data/menet_drop{0}.pt'.format(epoch)
+            pth_model = '{0}_{1}.pt'.format(save_path, epoch)
             torch.save(best_model.state_dict(), pth_model)
 
 

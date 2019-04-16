@@ -58,13 +58,21 @@ def get_menet_456(pretrained=False):
     return net
 
 
-def get_resnet18(number_outputs, pretrained=False):
+def get_resnet18(pretrained=False):
     net = torchvision.models.resnet18()
     if pretrained:
         net = torchvision.models.resnet18(
             pretrained='imagenet')
     num_ftrs = net.fc.in_features
-    net.fc = nn.Linear(num_ftrs, number_outputs)
+    out_ftrs = int(net.fc.out_features / 4)
+    net.fc = nn.Sequential(
+        nn.Sigmoid(),
+        nn.Dropout(0.5),
+        nn.Linear(num_ftrs, out_ftrs, bias=True),
+        nn.SELU(),
+        nn.Dropout(0.7),
+        nn.Linear(in_features=out_ftrs, out_features=1, bias=True),
+    )
     return net
 
 

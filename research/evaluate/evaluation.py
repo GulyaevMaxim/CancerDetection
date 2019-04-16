@@ -67,7 +67,7 @@ def main():
                              num_workers=1)
 
     submission_names = test_ds.get_train_img_names()
-    model = fm.get_dense_net_169(pretrained=False)
+    model = fm.get_resnet18(pretrained=False)
     # get_dense_net_121(2, pretrained=False)
 
     model.load_state_dict(torch.load(args.model))

@@ -39,6 +39,9 @@ Models are presented [here](https://drive.google.com/drive/folders/1aVX46pmBQUXB
 | 20 | B | MeNet456   | Epoch 21 | 0.9023 |
 | 21 | B | MeNet456   | Epoch 29 | 0.9103 |
 | 22 | B | MeNet456   | Epoch 31 | 0.9033 |
+| 23 | C | MeNet456   | Epoch 3 + Output 1x1 + Dropout | 0.9510 |
+| 24 | C | Dense121   | Epoch 20(Last Layer) + Epoch 20 + Output 1x1 + Dropout | 0.9745 |
+| 25 | C | Dense169   | Epoch 23 + Output 1x1 + Dropout | 0.9710 |
 
 
 ## Ensembling
@@ -53,6 +56,7 @@ Models are presented [here](https://drive.google.com/drive/folders/1aVX46pmBQUXB
 | 6 | Without threshold | 1, 3, 7 - 11, 14-16 | 0.9521 |
 | 7 | Without threshold | 1, 3, 6 - 12, 14-16, 19-22 | 0.9577 |
 | 8 | Without threshold | 1, 8-11, 15, 16, 19-22 | 0.9544 |
+| 9 | Without threshold | 24, 25 | 0.9746 |
 
 
 ## Types of augmentation
@@ -83,6 +87,7 @@ T.Normalize(mean, std) # ImageNet
 
 ```
 # pretrained ImageNet network
+albumentations.Resize(224, 224)
 albumentations.RandomRotate90(p=0.5),
 albumentations.Transpose(p=0.5),
 albumentations.Flip(p=0.5),

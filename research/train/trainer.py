@@ -31,15 +31,13 @@ std = [0.229, 0.224, 0.225]
 def main():
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--batch_size', '-b',
-                        help='Batch_size',
-                        type=int,
-                        default=14)
+    parser.add_argument('--batch_size', '-b', type=int, default=36,
+                        help='Batch_size')
     parser.add_argument('--dest', '-d',
                         help='Path to save model')
     parser.add_argument('--src', '-s',
                         help='Path to model',
-                        default='/home/maxim/Work/CancerDetection/data/dense_121_drop30.pt')
+                        default='/home/gulyaev/Work/CancerDetection/data/dense_121_drop30.pt')
     parser.add_argument('--weight', '-w',
                         help='weight image size for net',
                         type=int, default=224)
@@ -52,16 +50,16 @@ def main():
                         help='Path to weights of classes')
     parser.add_argument('--train_csv',
                         help='Path to data CSV',
-                        default='/home/maxim/Work/CancerDetection/data/my_train.csv')
+                        default='/home/gulyaev/Work/CancerDetection/data/my_train.csv')
     parser.add_argument('--data_train',
                         help='Path to images for dataset',
-                        default='/home/maxim/Work/CancerDetection/data/train/')
+                        default='/home/gulyaev/Work/CancerDetection/data/train/')
     parser.add_argument('--validate_csv',
                         help='Path to  validate data CSV ',
-                        default='/home/maxim/Work/CancerDetection/data/my_valid.csv')
+                        default='/home/gulyaev/Work/CancerDetection/data/my_valid.csv')
     parser.add_argument('--data_validate',
                         help='Path to images for dataset validate',
-                        default='/home/maxim/Work/CancerDetection/data/train/')
+                        default='/home/gulyaev/Work/CancerDetection/data/train/')
     parser.add_argument('--cuda', dest='is_available_cuda',
                         action='store_true')
     parser.add_argument('--no-cuda', dest='is_available_cuda',
@@ -70,17 +68,31 @@ def main():
     args = parser.parse_args()
     best_accuracy = -1.0
 
+    model = fm.get_dense_net_169(pretrained=True)
+    # get_dense_net_121(pretrained=True)
+
+    # model.load_state_dict(torch.load(args.src))
+
+    model.cuda()
+
     data_transforms = albumentations.Compose([
         albumentations.Resize(224, 224),
         albumentations.RandomRotate90(p=0.5),
         albumentations.Transpose(p=0.5),
         albumentations.Flip(p=0.5),
         albumentations.OneOf([
-            albumentations.CLAHE(clip_limit=2), albumentations.IAASharpen(), albumentations.IAAEmboss(),
-            albumentations.RandomBrightness(), albumentations.RandomContrast(),
-            albumentations.JpegCompression(), albumentations.Blur(), albumentations.GaussNoise()], p=0.5),
+            albumentations.CLAHE(clip_limit=2),
+            albumentations.IAASharpen(),
+            albumentations.IAAEmboss(),
+            albumentations.RandomBrightness(),
+            albumentations.RandomContrast(),
+            albumentations.JpegCompression(),
+            albumentations.Blur(),
+            albumentations.GaussNoise()], p=0.5),
         albumentations.HueSaturationValue(p=0.5),
-        albumentations.ShiftScaleRotate(shift_limit=0.15, scale_limit=0.15, rotate_limit=45, p=0.5),
+        albumentations.ShiftScaleRotate(shift_limit=0.15,
+                                        scale_limit=0.15,
+                                        rotate_limit=45, p=0.5),
         albumentations.Normalize(),
         AT.ToTensor()
     ])
@@ -91,11 +103,6 @@ def main():
         AT.ToTensor()
     ])
 
-    model = fm.get_dense_net_121(n_class, pretrained=True)
-
-    model.load_state_dict(torch.load(args.src))
-
-    model.cuda()
     optimizer = optim.Adam(model.parameters(), lr=0.0005)
 
     writer = SummaryWriter()
@@ -117,15 +124,15 @@ def main():
     for epoch in range(250):
 
         utils.train(model, writer, is_available_cuda, loader_train,
-                    criterion, optimizer, epoch + 31)
+                    criterion, optimizer, epoch)
         accuracy = utils.validate(model, writer, is_available_cuda,
-                                  loader_validate, criterion, epoch + 31)
+                                  loader_validate, criterion, epoch)
 
         if accuracy > best_accuracy:
             best_accuracy = accuracy
             best_model = copy.deepcopy(model)
             best_model.cpu()
-            pth_model = '/home/maxim/Work/CancerDetection/data/dense_121_drop{0}.pt'.format(epoch + 31)
+            pth_model = '/home/gulyaev/Work/CancerDetection/data/menet_drop{0}.pt'.format(epoch)
             torch.save(best_model.state_dict(), pth_model)
 
 

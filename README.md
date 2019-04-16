@@ -42,6 +42,8 @@ Models are presented [here](https://drive.google.com/drive/folders/1aVX46pmBQUXB
 | 23 | C | MeNet456   | Epoch 3 + Output 1x1 + Dropout | 0.9510 |
 | 24 | C | Dense121   | Epoch 20(Last Layer) + Epoch 20 + Output 1x1 + Dropout | 0.9745 |
 | 25 | C | Dense169   | Epoch 23 + Output 1x1 + Dropout | 0.9710 |
+| 25 | C | ResNet18   | Epoch 17 + Output 1x1 + Dropout | 0.9684 |
+| 26 | C | ResNet18   | Epoch 18 + Output 1x1 + Dropout | 0.9685 |
 
 
 ## Ensembling

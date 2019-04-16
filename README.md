@@ -43,8 +43,9 @@ Models are presented [here](https://drive.google.com/drive/folders/1aVX46pmBQUXB
 | 24 | C | Dense121*   | Epoch 20(Last Layer) + Epoch 18 + Output 1x1 + Dropout | 0.9745 |
 | 25 | C | Dense121*   | Epoch 20(Last Layer) + Epoch 16 + Output 1x1 + Dropout | 0.9742 |
 | 26 | C | Dense169*   | Epoch 23 + Output 1x1 + Dropout | 0.9710 |
-| 27 | C | ResNet18*   | Epoch 17 + Output 1x1 + Dropout | 0.9684 |
-| 28 | C | ResNet18*   | Epoch 18 + Output 1x1 + Dropout | 0.9685 |
+| 27 | C | Dense169*   | Epoch 13 + Output 1x1 + Dropout | 0.9695 |
+| 28 | C | ResNet18*   | Epoch 17 + Output 1x1 + Dropout | 0.9684 |
+| 29 | C | ResNet18*   | Epoch 18 + Output 1x1 + Dropout | 0.9685 |
 
 * We use these layers instead fully-connected layer (layer with output 1000 ImageNet classes) for modeles marked `*`
 
@@ -74,6 +75,7 @@ Models are presented [here](https://drive.google.com/drive/folders/1aVX46pmBQUXB
 | 7 | Without threshold | 1, 3, 6 - 12, 14-16, 19-22 | 0.9577 |
 | 8 | Without threshold | 1, 8-11, 15, 16, 19-22 | 0.9544 |
 | 9 | Without threshold | 24, 25 | 0.9746 |
+| 10 | Without threshold | 24-29 | 0.9772 |
 
 
 ## Types of augmentation

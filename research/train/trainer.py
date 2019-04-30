@@ -31,14 +31,14 @@ std = [0.229, 0.224, 0.225]
 def main():
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--batch_size', '-b', type=int, default=168,
+    parser.add_argument('--batch_size', '-b', type=int, default=256,
                         help='Batch_size')
     parser.add_argument('--dest', '-d',
                         help='Path to save model',
-                        default='/home/gulyaev/Work/CancerDetection/data/resnet_18_C')
+                        default='/home/gulyaev/Work/CancerDetection/data/Dense121_C_96x96_drop')
     parser.add_argument('--src', '-s',
                         help='Path to model',
-                        default='/home/gulyaev/Work/CancerDetection/data/dense_121_drop30.pt')
+                        default='/home/gulyaev/Work/CancerDetection/data/0_9665_Dense121_96x96_C_drop.pt')
     parser.add_argument('--weight', '-w',
                         help='weight image size for net',
                         type=int, default=224)
@@ -70,10 +70,9 @@ def main():
     best_accuracy = -1.0
     save_path = args.dest
 
-    model = fm.get_resnet18(pretrained=True)
-    # get_dense_net_121(pretrained=True)
+    model = fm.get_dense_net_121(pretrained=True)
 
-    # model.load_state_dict(torch.load(args.src))
+    model.load_state_dict(torch.load(args.src))
 
     model.cuda()
 
@@ -105,7 +104,7 @@ def main():
         AT.ToTensor()
     ])
 
-    optimizer = optim.Adam(model.parameters(), lr=0.0005)
+    optimizer = optim.Adam(model.parameters(), lr=0.00001)
 
     writer = SummaryWriter()
     train_ds = CancerDataset(csv_file=args.train_csv,
@@ -126,15 +125,15 @@ def main():
     for epoch in range(250):
 
         utils.train(model, writer, is_available_cuda, loader_train,
-                    criterion, optimizer, epoch)
+                    criterion, optimizer, epoch + 21)
         accuracy = utils.validate(model, writer, is_available_cuda,
-                                  loader_validate, criterion, epoch)
+                                  loader_validate, criterion, epoch + 21)
 
         if accuracy > best_accuracy:
             best_accuracy = accuracy
             best_model = copy.deepcopy(model)
             best_model.cpu()
-            pth_model = '{0}_{1}.pt'.format(save_path, epoch)
+            pth_model = '{0}_{1}.pt'.format(save_path, epoch + 21)
             torch.save(best_model.state_dict(), pth_model)
 
 

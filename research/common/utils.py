@@ -124,7 +124,10 @@ def validate(model, writer,
 
             pbar.set_description('Loss {}'.format(loss))
 
-            batch_acc = accuracy(y_predicted, target, topk=(1,))
+            sigmoided_predict = torch.sigmoid(y_predicted)
+            sigmoided_predict[sigmoided_predict >= 0.5] = 1
+            sigmoided_predict[sigmoided_predict < 0.5] = 0
+            batch_acc = accuracy(sigmoided_predict, target, topk=(1,))
             acc += batch_acc[0]
             try:
                 batch_roc_acc = roc_auc(y_predicted[0:].detach().cpu(), target.cpu())

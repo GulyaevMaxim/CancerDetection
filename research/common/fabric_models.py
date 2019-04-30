@@ -85,19 +85,3 @@ def get_resnet50(number_outputs, pretrained=False):
     net.fc = nn.Linear(num_ftrs, number_outputs)
     return net
 
-
-def get_fishnet150(pretrained=False):
-    net = ptcv_get_model("fishnet150", pretrained=False)
-    if pretrained:
-        net = ptcv_get_model("fishnet150", pretrained=True)
-    num_ftrs = net.output.final_conv.in_channels
-    out_ftrs = int(net.output.final_conv.out_channels / 4)
-    net.classifier = nn.Sequential(
-        nn.Sigmoid(),
-        nn.Dropout(0.5),
-        nn.Linear(num_ftrs, out_ftrs, bias=True),
-        nn.SELU(),
-        nn.Dropout(0.7),
-        nn.Linear(in_features=out_ftrs, out_features=1, bias=True),
-    )
-    return net

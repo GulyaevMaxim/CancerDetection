@@ -84,4 +84,3 @@ def get_resnet50(number_outputs, pretrained=False):
     num_ftrs = net.fc.in_features
     net.fc = nn.Linear(num_ftrs, number_outputs)
     return net
-

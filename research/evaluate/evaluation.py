@@ -90,13 +90,12 @@ def main():
 
             for predicted in y_predicted:
 
-                #label = numpy.argmax(predicted.cpu().numpy())
+                # label = numpy.argmax(predicted.cpu().numpy())
                 predicted_labels.append(predicted.cpu().numpy()[0])
             del data
             del y_predicted
 
     predicted_labels = numpy.array(predicted_labels)
-
     utils.generate_submission(submission_names, predicted_labels, path_to_out)
 
 

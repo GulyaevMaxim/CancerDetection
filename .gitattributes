@@ -27,4 +27,7 @@ research/train/runs/DenseNet169/* filter=lfs diff=lfs merge=lfs -text
 research/train/runs/ResNet18_C_drop filter=lfs diff=lfs merge=lfs -text
 research/train/runs/Dense121_C_96_96_drop_<20 filter=lfs diff=lfs merge=lfs -text
 research/train/runs/Dense121_C_96_96_drop_20+ filter=lfs diff=lfs merge=lfs -text
+research/train/runs/ResNet18_C_drop filter=lfs diff=lfs merge=lfs -text
+research/train/runs/DenseNet121_C_drop_Train-Classifier filter=lfs diff=lfs merge=lfs -text
+research/train/runs/DenseNet121_C_drop_Train-Net filter=lfs diff=lfs merge=lfs -text
 research/train/runs/DenseNet169_C_drop filter=lfs diff=lfs merge=lfs -text

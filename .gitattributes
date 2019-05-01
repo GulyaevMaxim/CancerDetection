@@ -35,3 +35,4 @@ research/data/test_config.json filter=lfs diff=lfs merge=lfs -text
 research/data/train_config.json filter=lfs diff=lfs merge=lfs -text
 research/data/0_9745_Dense121_C_drop.pt filter=lfs diff=lfs merge=lfs -text
 *tiff filter=lfs diff=lfs merge=lfs -text
+research/data/test_samples.zip filter=lfs diff=lfs merge=lfs -text

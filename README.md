@@ -28,6 +28,8 @@ pip install -r requirements.txt
 conda install -c zeus1942 pytorch 
 ```
 
+Our enviroment is presented [here](https://drive.google.com/drive/folders/1aVX46pmBQUXB2lOooTg7t-0KaXFGUWhY?usp=sharing)
+
 # How to start
 
 Install all dependencies and create configuration files.

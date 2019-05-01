@@ -5,8 +5,27 @@ https://www.kaggle.com/c/histopathologic-cancer-detection
 
 For install dependencies. Run
 
+## Linux
+
 ```
 pip3 install -r requirements.txt
+```
+
+## Windows
+
+Install Conda. Instruction [here](https://clck.ru/FqLAz)
+
+```
+conda info --envs
+source activate base # or create and use
+
+#Creat env
+conda create -n yourenvname python=x.x anaconda
+source activate yourenvname
+conda install -n yourenvname
+
+pip install -r requirements.txt
+conda install -c zeus1942 pytorch 
 ```
 
 # How to start

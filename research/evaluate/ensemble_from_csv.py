@@ -1,7 +1,12 @@
 import pandas
 import argparse
 import os
-import research.common.utils as utils
+import sys
+
+path = os.path.abspath(__file__).rsplit(os.path.sep, 2)[0]
+path = os.path.join(path, 'common')
+sys.path.append(path)
+import utils
 
 
 def main():

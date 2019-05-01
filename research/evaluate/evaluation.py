@@ -12,7 +12,7 @@ from torch.autograd import Variable
 import albumentations
 from albumentations import torch as AT
 
-path = os.path.abspath(__file__).rsplit('/', 2)[0]
+path = os.path.abspath(__file__).rsplit(os.path.sep, 2)[0]
 path = os.path.join(path, 'common')
 sys.path.append(path)
 import utils

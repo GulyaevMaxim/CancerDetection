@@ -1,0 +1,15 @@
+{
+    "batch_size": 12,
+    "dest_model": "/home/maxim/Work/Dense121_C_drop",
+    "src_model": "/home/maxim/Work/0_9745_Dense121_C_drop.pt",
+    "width": 224,
+    "height": 224,
+    "train_csv": "/home/maxim/Work/CD_multiplat/CancerDetection/research/data/my_train.csv",
+    "valid_csv": "/home/maxim/Work/CD_multiplat/CancerDetection/research/data/my_valid.csv",
+    "data_train": "/home/maxim/Work/CancerDetection/data/train/",
+    "data_validate": "/home/maxim/Work/CancerDetection/data/train/",
+    "cuda": true,
+    "st_epoch": 0,
+    "do_epoch": 250
+}
+

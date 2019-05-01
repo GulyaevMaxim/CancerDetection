@@ -1,75 +1,52 @@
 import torch
-import torchvision.transforms as T
-import argparse
-from tqdm import tqdm
-import sys
-import pandas
-from torch.utils.data import DataLoader
-import research.common.utils as utils
-from research.common.loader import CancerDataset
-import numpy
 import torchvision
-import torch.nn as nn
-import research.common.fabric_models as fm
+import argparse
+import sys
+import os
+import pandas
+import numpy
+import json
+from tqdm import tqdm
 from torch.utils.data import DataLoader
 from torch.autograd import Variable
-
-
 import albumentations
 from albumentations import torch as AT
 
-sys.path.append('../../common')
-
-is_available_cuda = True
-
-# For ImageNet
-mean = [0.485, 0.456, 0.406]
-std = [0.229, 0.224, 0.225]
+path = os.path.abspath(__file__).rsplit('/', 2)[0]
+path = os.path.join(path, 'common')
+sys.path.append(path)
+import utils
+from loader import CancerDataset
+import fabric_models as fm
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--batch_size', '-b',
-                        help='Batch_size',
-                        type=int,
-                        default=256)
-    parser.add_argument('--weight', '-w',
-                        help='weight image size for net',
-                        type=int, default=224)
-    parser.add_argument('--height',
-                        help='height image size for net',
-                        type=int, default=224)
-    parser.add_argument('--model', '-m',
-                        help='Path to model')
-    parser.add_argument('--data_csv',
-                        help='Path to data CSV')
-    parser.add_argument('--data',
-                        help='Path to images for dataset')
-    parser.add_argument('--path_to_out_zip',
-                        help='Path to  out file with submission ')
-    parser.add_argument('--cuda', dest='is_available_cuda',
-                        action='store_true')
-    parser.add_argument('--no-cuda', dest='is_available_cuda',
-                        action='store_false')
-    parser.set_defaults(is_available_cuda=True)
+    parser.add_argument('-s',
+                        help='Settings file')
     args = parser.parse_args()
-    path_to_out = args.path_to_out_zip
+    with open(args.s) as config_file:
+        config = json.load(config_file)
 
-    test_ds = CancerDataset(csv_file=args.data_csv,
-                            root_dir=args.data,
+    path_to_out = config.get('out_path')
+    is_available_cuda = config.get('cuda', False)
+
+    test_ds = CancerDataset(csv_file=config.get('data_csv'),
+                            root_dir=config.get('data'),
                             transform_image=albumentations.Compose([
-                                albumentations.Resize(224, 224),
+                                albumentations.Resize(int(config.get('width')),
+                                                      int(config.get('height'))),
                                 albumentations.Normalize(),
                                 AT.ToTensor()
                             ]))
 
-    loader_test = DataLoader(test_ds, batch_size=args.batch_size,
+    loader_test = DataLoader(test_ds, batch_size=config.get('batch_size'),
                              num_workers=1)
 
     submission_names = test_ds.get_train_img_names()
     model = fm.get_dense_net_121(pretrained=False)
 
-    model.load_state_dict(torch.load(args.model))
+    model.load_state_dict(torch.load(config.get('model')))
     model.eval()
 
     if is_available_cuda:
@@ -90,13 +67,14 @@ def main():
 
             for predicted in y_predicted:
 
-                # label = numpy.argmax(predicted.cpu().numpy())
                 predicted_labels.append(predicted.cpu().numpy()[0])
+
             del data
             del y_predicted
 
     predicted_labels = numpy.array(predicted_labels)
-    utils.generate_submission(submission_names, predicted_labels, path_to_out)
+    utils.generate_submission(submission_names,
+                              predicted_labels, path_to_out)
 
 
 if __name__ == '__main__':

@@ -1,0 +1,11 @@
+{
+    "batch_size": 168,
+    "width": 224,
+    "height": 224,
+    "model": "/home/maxim/Work/0_9745_Dense121_C_drop.pt",
+    "data_csv": "/home/maxim/Work/CancerDetection/data/sample_submission.csv",
+    "data": "/home/maxim/Work/CancerDetection/data/test/",
+    "out_path": "/home/maxim/Work/out.csv",
+    "cuda": true
+}
+

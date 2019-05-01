@@ -9,6 +9,35 @@ For install dependencies. Run
 pip3 install -r requirements.txt
 ```
 
+# How to start
+
+Install all dependencies and create configuration files.
+
+If you want use our selections use this command:
+
+```
+git lfs pull
+```
+
+We have configuration files in `research/data` directory [here](https://github.com/GulyaevMaxim/CancerDetection/tree/master/research/data)
+
+In this directory you can find README with description of configs.
+
+For evaluation script use this command:
+
+```
+python3 research/evaluate/evaluation.py -s <config>
+
+```
+
+For training script use this command:
+
+```
+python3 research/train/trainer.py -s <config>
+
+```
+
+
 # Testing
 
 Models are presented [here](https://drive.google.com/drive/folders/1aVX46pmBQUXB2lOooTg7t-0KaXFGUWhY?usp=sharing)

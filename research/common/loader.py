@@ -24,9 +24,7 @@ class CancerDataset(Dataset):
         ----------
         csv_file Path to the csv file with annotations.
         root_dir Directory with all the images.
-        mask_dir Directory with all the masks.
         transform_image transforms for images
-        transform_mask transforms for masks
         """
         if csv_file is None:
             self.train_img_names = os.listdir(root_dir)
@@ -36,6 +34,7 @@ class CancerDataset(Dataset):
             self.train_images = pandas.read_csv(csv_file)
 
             self.train_img_names = self.train_images.values[:, 0]
+            self.train_img_names += '.tif'
             self.predicted_labels = self.train_images.values[:, 1]
 
         self.root_dir = os.path.abspath(root_dir)
@@ -47,7 +46,6 @@ class CancerDataset(Dataset):
 
     def __getitem__(self, id):
         img_name = os.path.join(self.root_dir, self.train_img_names[id])
-        img_name += '.tif'
         img = cv2.imread(img_name)
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         image = self.transform_image(image=img)

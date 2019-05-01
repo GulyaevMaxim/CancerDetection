@@ -3,7 +3,7 @@
 ## Train
 
 | Argument| Type | Description | Default value |
-| ---- | ---- | ---- |---- | ---|
+| ---- | ---- | ---- |---- |
 | `batch_size` | int | Batch_size | No|
 | `width` | int | Weight image size for net | No |
 | `height` | int | Height image size for net | No |
@@ -20,7 +20,7 @@
 ## Test
 
 | Argument| Type | Description | Default value |
-| ---- | ---- | ---- |---- | ---|
+| ---- | ---- | ---- |---- |
 | `batch_size` | int | Batch_size | No|
 | `width` | int | Weight image size for net | No |
 | `height` | int | Height image size for net | No |

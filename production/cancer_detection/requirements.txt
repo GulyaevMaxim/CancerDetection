@@ -1,0 +1,12 @@
+tqdm==4.31.1
+opencv-python==4.0.0.21
+Pillow==5.4.1
+numpy==1.14.6
+pandas==0.24.1
+matplotlib
+sklearn
+albumentations
+tensorboardX
+pytorchcv
+torch==0.4.1
+torchvision==0.2.2.post3

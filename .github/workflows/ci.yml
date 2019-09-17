@@ -22,3 +22,13 @@ jobs:
         pip3 install wheel pybind11
         pip3 install -U setuptools
         pip3 install -r requirements.txt
+
+  test:
+  
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: Testing 
+      run: |
+        python3 production/test/test.py

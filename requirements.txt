@@ -1,5 +1,5 @@
 tqdm==4.31.1
-opencv-python==4.0.0.21
+opencv-python==4.2.0.32
 Pillow==6.2.0
 numpy==1.14.6
 pandas==0.24.1
